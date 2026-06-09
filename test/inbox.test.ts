@@ -1,9 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
+import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 describe('agentinbox', () => {
   it('package.json should have all required metadata', () => {
-    const pkg = JSON.parse(require('fs').readFileSync(require.resolve('../package.json'), 'utf8'));
+    const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
     assert.ok(pkg.name);
     assert.ok(pkg.author && pkg.author !== 'StackForge User');
     assert.ok(pkg.repository);
@@ -13,7 +15,6 @@ describe('agentinbox', () => {
   });
 
   it('build should succeed', () => {
-    const { execSync } = require('child_process');
     execSync('npm run build', { encoding: 'utf8' });
     assert.ok(true, 'build passed');
   });

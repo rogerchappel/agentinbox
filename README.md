@@ -9,20 +9,21 @@ security posture before using it in production.
 
 ## Install
 
-Replace this section with the generated repository's installation steps.
-
 ```sh
-pnpm install
+npm install
+npm run build
 ```
 
 ## Use
 
-Replace this section with the smallest useful example for the generated
-repository.
-
 ```sh
-pnpm dev
+node dist/cli.js scan fixtures/inbox --out tmp/inbox
+cat tmp/inbox/inbox.json
 ```
+
+`agentinbox scan` reads local Markdown and text task notes, scores each task for
+acceptance criteria and verification hints, and writes a deterministic
+`inbox.json` summary for agent handoffs.
 
 ## Verify
 

@@ -8,10 +8,9 @@
     "agentinbox": "./dist/src/cli.js"
   },
   "exports": {
-    "0": [
-      "./dist/src/index.js"
-    ],
-    ".": "./dist/index.js"
+    ".": {
+      "import": "./dist/src/index.js"
+    }
   },
   "files": [
     "dist",
@@ -20,7 +19,8 @@
     "LICENSE",
     "SECURITY.md",
     "CHANGELOG.md",
-    "CONTRIBUTING.md"
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -28,7 +28,7 @@
     "lint": "node scripts/lint.mjs",
     "smoke": "npm run build && bash scripts/smoke.sh",
     "test": "npm run build && node --test dist/test/*.test.js",
-    "package:smoke": "npm pack --dry-run",
+    "package:smoke": "npm run build && npm pack --dry-run",
     "release:check": "npm run check && npm test && npm run smoke && npm run package:smoke"
   },
   "keywords": [
@@ -46,7 +46,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rogerchappel/agentinbox"
+    "url": "git+https://github.com/rogerchappel/agentinbox.git"
   },
   "bugs": {
     "url": "https://github.com/rogerchappel/agentinbox/issues"

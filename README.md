@@ -66,6 +66,13 @@ npm run release:check
 
 Use `npm run package:smoke` or `npm pack --dry-run` to confirm the published tarball includes the support docs and runnable package contents.
 
+## Package contents
+
+The npm package entrypoint is `dist/src/index.js` and the CLI is
+`dist/src/cli.js`. The package allowlist includes the compiled runtime,
+fixtures, and release support files: `README.md`, `LICENSE`, `SECURITY.md`,
+`CHANGELOG.md`, `CONTRIBUTING.md`, and `CODE_OF_CONDUCT.md`.
+
 ## Verification
 
 Run the release-readiness checks that match this package before publishing or opening a release PR.

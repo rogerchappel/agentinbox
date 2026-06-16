@@ -17,13 +17,19 @@ npm run build
 ## Use
 
 ```sh
-node dist/cli.js scan fixtures/inbox --out tmp/inbox
+node dist/src/cli.js scan fixtures/inbox --out tmp/inbox
 cat tmp/inbox/inbox.json
 ```
 
 `agentinbox scan` reads local Markdown and text task notes, scores each task for
 acceptance criteria and verification hints, and writes a deterministic
 `inbox.json` summary for agent handoffs.
+
+After installation from npm, use the same flow through the package bin:
+
+```sh
+agentinbox scan fixtures/inbox --out tmp/inbox
+```
 
 ## Verify
 
@@ -51,9 +57,9 @@ These links assume this README has been copied to the generated repository root.
 
 MIT
 
-## Verification
+## Release verification
 
-Run the release-readiness checks before publishing or cutting a PR:
+Run the release-readiness checks before publishing, tagging, or cutting a PR:
 
 ```bash
 npm run check
@@ -72,18 +78,5 @@ The npm package entrypoint is `dist/src/index.js` and the CLI is
 `dist/src/cli.js`. The package allowlist includes the compiled runtime,
 fixtures, and release support files: `README.md`, `LICENSE`, `SECURITY.md`,
 `CHANGELOG.md`, `CONTRIBUTING.md`, and `CODE_OF_CONDUCT.md`.
-
-## Verification
-
-Run the release-readiness checks that match this package before publishing or opening a release PR.
-
-- `npm run lint` - run lint rules
-
-## Release Verification
-
-Before publishing or tagging a release, run the same verification path used by CI:
-
-- `npm run release:check`
-- `npm run package:smoke`
 
 See `docs/release-readiness.md` for the package surface, CLI bins, and reviewer checklist.

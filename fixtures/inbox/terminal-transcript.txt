@@ -1,0 +1,15 @@
+# Terminal note from agent session
+
+Scope: /tmp/repo-review-skill
+
+User: please add a smoke command and make sure the package does not touch the network.
+Agent: I will update scripts and tests.
+
+## Done When
+
+- smoke command runs against fixtures
+- safety notes mention no external writes
+
+## Verification
+
+- bash scripts/validate.sh

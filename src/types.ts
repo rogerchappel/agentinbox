@@ -46,9 +46,11 @@ export interface ScanOptions {
 export interface BriefOptions {
   input: string;
   format: "markdown" | "json";
+  outDir?: string;
 }
 
 export interface LintOptions {
   input: string;
   failUnder: number;
+  outDir?: string;
 }

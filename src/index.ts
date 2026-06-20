@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { discoverInputs, readInput } from "./fs.js";
+import { parseJsonLines, parseJsonTasks } from "./parse/json.js";
 import { parseMarkdown } from "./parse/markdown.js";
 import type { ScanOptions, ScanSummary, ScoredTask, TaskRecord } from "./types.js";
 
@@ -44,6 +45,10 @@ export async function scanInbox(options: ScanOptions): Promise<ScanSummary> {
     const input = await readInput(file);
     if (input.kind === "markdown" || input.kind === "text") {
       tasks.push(...parseMarkdown(input.path, input.text).map(scoreTask));
+    } else if (input.kind === "json") {
+      tasks.push(...parseJsonTasks(input.path, input.text).map(scoreTask));
+    } else if (input.kind === "jsonl") {
+      tasks.push(...parseJsonLines(input.path, input.text).map(scoreTask));
     }
   }
 

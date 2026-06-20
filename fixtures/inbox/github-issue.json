@@ -1,0 +1,17 @@
+{
+  "tasks": [
+    {
+      "id": "issue-42",
+      "title": "Add connector dry-run preview",
+      "body": "Repo: /tmp/connector-router\nLabels: connector, dry-run\nUsers need a preview before an agent posts changes to an external CRM.",
+      "acceptanceCriteria": [
+        "Preview lists every external action before execution",
+        "Default command writes only local files"
+      ],
+      "verification": [
+        "npm test",
+        "npm run smoke"
+      ]
+    }
+  ]
+}

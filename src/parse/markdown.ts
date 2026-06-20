@@ -22,7 +22,7 @@ function splitSections(text: string): Section[] {
   let current: Section | undefined;
 
   lines.forEach((line, index) => {
-    const heading = line.match(/^#{1,3}\s+(.+)$/);
+    const heading = line.match(/^#\s+(.+)$/);
     if (heading) {
       if (current) {
         sections.push(current);

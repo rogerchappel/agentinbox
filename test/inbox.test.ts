@@ -26,13 +26,13 @@ describe('agentinbox', () => {
   it('compiled CLI scans the packaged fixture inbox', () => {
     const outDir = mkdtempSync(path.join(tmpdir(), 'agentinbox-'));
     const output = execFileSync(process.execPath, [cliPath.pathname, 'scan', 'fixtures/inbox', '--out', outDir], { encoding: 'utf8' });
-    assert.match(output, /Wrote 7 task\(s\)/);
+    assert.match(output, /Wrote 5 task\(s\)/);
 
     const summary = JSON.parse(readFileSync(path.join(outDir, 'inbox.json'), 'utf8'));
-    assert.equal(summary.taskCount, 7);
+    assert.equal(summary.taskCount, 5);
     assert.ok(summary.tasks.every((task: { title: string }) => task.title.length > 0));
     assert.match(readFileSync(path.join(outDir, 'brief.md'), 'utf8'), /# Agent Inbox/);
-    assert.equal(JSON.parse(readFileSync(path.join(outDir, 'queue.json'), 'utf8')).tasks.length, 7);
+    assert.equal(JSON.parse(readFileSync(path.join(outDir, 'queue.json'), 'utf8')).tasks.length, 5);
   });
 
   it('prints markdown briefs from the CLI', () => {

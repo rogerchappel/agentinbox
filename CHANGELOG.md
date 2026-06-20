@@ -9,7 +9,11 @@ format and uses semantic versioning when versioned releases are published.
 
 ### Added
 
-- Initial project setup.
+- CLI commands for `scan`, `brief`, and `lint`.
+- Markdown, text transcript, JSON, and JSONL task ingestion.
+- Generated `inbox.json`, `brief.md`, and `queue.json` artifacts.
+- Agent skill instructions and input format documentation.
+- Fixture-backed tests and smoke coverage for release-candidate verification.
 
 ## Release Links
 

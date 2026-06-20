@@ -11,6 +11,9 @@ Use this checklist before publishing, tagging, or asking reviewers to trust the 
 ## CLI Surface
 
 - `agentinbox` -> `./dist/src/cli.js`
+- `agentinbox scan <input> --out <dir>`
+- `agentinbox brief <input> --format markdown|json`
+- `agentinbox lint <input> --fail-under <score>`
 
 ## Verification Commands
 
@@ -27,5 +30,6 @@ Run `npm run release:check` before opening a release PR. Record any skipped comm
 
 - Compare README examples with the current CLI bins or module exports.
 - Confirm `npm test` runs the compiled CLI against `fixtures/inbox` and checks the deterministic `inbox.json` summary.
+- Confirm smoke output includes `brief.md` and `queue.json`.
 - Inspect `npm pack --dry-run` output for generated logs, caches, or private fixtures.
 - Confirm CI exercises the same release check path used locally.

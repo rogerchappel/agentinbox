@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { briefInbox, lintInbox, scanInbox } from "./index.js";
+import { briefInbox, lintInbox, planInbox, scanInbox } from "./index.js";
 
 function help(): string {
   return `agentinbox
@@ -7,12 +7,14 @@ function help(): string {
 Usage:
   agentinbox scan <input> --out <dir>
   agentinbox brief <input> [--format markdown|json] [--out <dir>]
+  agentinbox plan <input> [--format markdown|json] [--out <dir>]
   agentinbox lint <input> [--fail-under 75] [--out <dir>]
   agentinbox --help
 
 Commands:
   scan    Parse local task notes into inbox.json, brief.md, and queue.json.
   brief   Print a Markdown or JSON brief for agent handoff review.
+  plan    Print a risk-ordered action plan for coding agents.
   lint    Fail when any task scores below the requested threshold.
 `;
 }
@@ -29,8 +31,8 @@ export async function main(argv = process.argv.slice(2)): Promise<number> {
   }
 
   const [command, input] = argv;
-  if (!input || !["scan", "brief", "lint"].includes(command)) {
-    process.stderr.write("agentinbox: expected `scan`, `brief`, or `lint` with an input path\n");
+  if (!input || !["scan", "brief", "plan", "lint"].includes(command)) {
+    process.stderr.write("agentinbox: expected `scan`, `brief`, `plan`, or `lint` with an input path\n");
     return 2;
   }
 
@@ -44,6 +46,12 @@ export async function main(argv = process.argv.slice(2)): Promise<number> {
   if (command === "brief") {
     const format = readOption(argv, "--format") === "json" ? "json" : "markdown";
     process.stdout.write(await briefInbox({ input, format, outDir }));
+    return 0;
+  }
+
+  if (command === "plan") {
+    const format = readOption(argv, "--format") === "json" ? "json" : "markdown";
+    process.stdout.write(await planInbox({ input, format, outDir }));
     return 0;
   }
 

@@ -54,3 +54,9 @@ export interface LintOptions {
   failUnder: number;
   outDir?: string;
 }
+
+export interface PlanOptions {
+  input: string;
+  format: "markdown" | "json";
+  outDir?: string;
+}

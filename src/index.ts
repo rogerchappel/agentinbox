@@ -3,8 +3,8 @@ import path from "node:path";
 import { discoverInputs, readInput } from "./fs.js";
 import { parseJsonLines, parseJsonTasks } from "./parse/json.js";
 import { parseMarkdown } from "./parse/markdown.js";
-import { renderMarkdownSummary, renderQueue } from "./render.js";
-import type { BriefOptions, LintOptions, ScanOptions, ScanSummary, ScoredTask, TaskRecord } from "./types.js";
+import { renderMarkdownSummary, renderPlanJson, renderPlanMarkdown, renderQueue } from "./render.js";
+import type { BriefOptions, LintOptions, PlanOptions, ScanOptions, ScanSummary, ScoredTask, TaskRecord } from "./types.js";
 
 function scoreTask(task: TaskRecord): ScoredTask {
   const findings = [];
@@ -85,5 +85,10 @@ export async function lintInbox(options: LintOptions): Promise<{ ok: boolean; su
   return { ok: failures.length === 0 && summary.taskCount > 0, summary, failures };
 }
 
-export { renderMarkdownSummary, renderQueue } from "./render.js";
-export type { ScanSummary, ScoredTask, TaskRecord } from "./types.js";
+export async function planInbox(options: PlanOptions): Promise<string> {
+  const summary = await scanInbox({ input: options.input, outDir: options.outDir ?? "agentinbox-out" });
+  return options.format === "json" ? renderPlanJson(summary) : renderPlanMarkdown(summary);
+}
+
+export { orderedPlanTasks, renderMarkdownSummary, renderPlanJson, renderPlanMarkdown, renderQueue } from "./render.js";
+export type { PlanOptions, ScanSummary, ScoredTask, TaskRecord } from "./types.js";

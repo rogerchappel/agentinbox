@@ -42,6 +42,18 @@ describe('agentinbox', () => {
     assert.match(output, /npm run smoke/);
   });
 
+  it('prints risk-ordered action plans from the CLI', () => {
+    const outDir = mkdtempSync(path.join(tmpdir(), 'agentinbox-plan-'));
+    const output = execFileSync(process.execPath, [cliPath.pathname, 'plan', 'fixtures/inbox', '--out', outDir], { encoding: 'utf8' });
+    assert.match(output, /# Agent Action Plan/);
+    assert.match(output, /Preflight fixes/);
+
+    const json = execFileSync(process.execPath, [cliPath.pathname, 'plan', 'fixtures/inbox', '--format', 'json', '--out', outDir], { encoding: 'utf8' });
+    const plan = JSON.parse(json);
+    assert.equal(plan.tasks.length, 5);
+    assert.deepEqual(plan.tasks.slice(0, 2).map((task: { risk: string }) => task.risk), ['low', 'low']);
+  });
+
   it('passes lint for actionable fixture tasks', () => {
     const outDir = mkdtempSync(path.join(tmpdir(), 'agentinbox-lint-'));
     const output = execFileSync(process.execPath, [cliPath.pathname, 'lint', 'fixtures/inbox', '--fail-under', '60', '--out', outDir], { encoding: 'utf8' });

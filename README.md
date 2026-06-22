@@ -16,12 +16,16 @@ The scan writes:
 - `brief.md`: reviewable Markdown handoff.
 - `queue.json`: compact queue records for local runners.
 
+Use `agentinbox plan` when a coding agent needs a deterministic run order instead of the full inbox.
+
 ## CLI
 
 ```sh
 agentinbox scan <input> --out <dir>
 agentinbox brief <input> --format markdown
 agentinbox brief <input> --format json
+agentinbox plan <input> --format markdown
+agentinbox plan <input> --format json
 agentinbox lint <input> --fail-under 75
 ```
 
@@ -32,8 +36,11 @@ Inputs can be `.md`, `.txt`, `.json`, or `.jsonl` files, or directories containi
 ```sh
 agentinbox scan fixtures/inbox --out tmp/inbox
 agentinbox brief fixtures/inbox/github-issue.json --format markdown
+agentinbox plan fixtures/inbox --format markdown
 agentinbox lint fixtures/inbox --fail-under 60
 ```
+
+The plan output sorts tasks by safer risk first, then by score, and keeps scope, acceptance criteria, verification, and preflight findings beside each step.
 
 ## Scoring
 

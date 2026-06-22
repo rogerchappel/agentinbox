@@ -22,14 +22,16 @@ No approval is needed for local scans or generated briefs. Get explicit human ap
 
 1. Run `agentinbox scan <input> --out .agentinbox`.
 2. Review `.agentinbox/brief.md` for missing acceptance criteria, vague scope, or absent verification hints.
-3. Run `agentinbox lint <input> --fail-under 75 --out .agentinbox`.
-4. Hand `.agentinbox/queue.json` to a runner only after the findings are acceptable.
+3. Run `agentinbox plan <input> --format markdown --out .agentinbox` to review a risk-ordered execution plan.
+4. Run `agentinbox lint <input> --fail-under 75 --out .agentinbox`.
+5. Hand `.agentinbox/queue.json` or the JSON plan to a runner only after the findings are acceptable.
 
 ## Examples
 
 ```sh
 agentinbox scan fixtures/inbox --out tmp/inbox
 agentinbox brief fixtures/inbox/github-issue.json --format markdown
+agentinbox plan fixtures/inbox --format json
 agentinbox lint fixtures/inbox --fail-under 60
 ```
 

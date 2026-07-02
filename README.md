@@ -10,6 +10,9 @@ npm run build
 npx agentinbox scan fixtures/inbox --out tmp/inbox
 ```
 
+Git installs run the package `prepare` hook so the `agentinbox` bin is built
+under `dist/src/cli.js` before npm links it.
+
 The scan writes:
 
 - `inbox.json`: complete scored task records.

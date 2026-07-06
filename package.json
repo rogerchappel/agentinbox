@@ -31,7 +31,7 @@
     "lint": "node scripts/lint.mjs",
     "smoke": "npm run build && bash scripts/smoke.sh",
     "test": "npm run build && node --test dist/test/*.test.js",
-    "package:smoke": "npm run build && npm pack --dry-run",
+    "package:smoke": "npm run build && node scripts/verify-package-bin.mjs && npm pack --dry-run",
     "release:check": "npm run check && npm test && npm run build && npm run smoke && npm run package:smoke",
     "prepare": "npm run build"
   },

@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import { access } from 'node:fs/promises';
 import { readFile } from 'node:fs/promises';
 
@@ -22,3 +23,35 @@ if (missing.length > 0) {
 }
 
 console.log(`Verified ${bins.length} package bin target(s).`);
+
+const expectedPackedFiles = [
+  'dist/src/cli.js',
+  'dist/src/index.js',
+  'docs/INPUT_FORMATS.md',
+  'docs/RELEASE_CHECKLIST.md',
+  'fixtures/inbox/github-issue.json',
+  'fixtures/inbox/task-queue.jsonl',
+  'scripts/smoke.sh',
+  'SKILL.md',
+  'README.md',
+  'LICENSE',
+  'SECURITY.md',
+  'CHANGELOG.md',
+  'CONTRIBUTING.md',
+  'CODE_OF_CONDUCT.md'
+];
+
+const output = execFileSync('npm', ['pack', '--dry-run', '--json'], {
+  encoding: 'utf8',
+  stdio: ['ignore', 'pipe', 'inherit']
+});
+
+const [pack] = JSON.parse(output);
+const publishedFiles = new Set(pack.files.map((file) => file.path));
+const missingPackedFiles = expectedPackedFiles.filter((file) => !publishedFiles.has(file));
+
+if (missingPackedFiles.length > 0) {
+  throw new Error(`package dry-run missing expected file(s): ${missingPackedFiles.join(', ')}`);
+}
+
+console.log(`Verified package dry-run contents (${pack.files.length} file(s)).`);

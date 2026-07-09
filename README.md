@@ -66,6 +66,10 @@ npm run smoke
 npm run package:smoke
 ```
 
+`npm run package:smoke` builds the package, verifies the declared npm bin
+exists, runs its `--help` path, and checks the dry-run tarball includes the
+release-critical docs, fixtures, and scripts.
+
 ## Limitations
 
 - Parsing is deterministic and heuristic-based, not an LLM review.

@@ -13,6 +13,14 @@ const missing = [];
 for (const [name, target] of bins) {
   try {
     await access(new URL(`../${target}`, import.meta.url));
+    const helpOutput = execFileSync(process.execPath, [target, '--help'], {
+      cwd: new URL('..', import.meta.url),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    if (!helpOutput.includes('Usage:')) {
+      throw new Error(`${name} --help did not print usage text`);
+    }
   } catch {
     missing.push(`${name} -> ${target}`);
   }
@@ -22,7 +30,7 @@ if (missing.length > 0) {
   throw new Error(`package bin target(s) missing after build: ${missing.join(', ')}`);
 }
 
-console.log(`Verified ${bins.length} package bin target(s).`);
+console.log(`Verified ${bins.length} package bin target(s) and help output.`);
 
 const expectedPackedFiles = [
   'dist/src/cli.js',

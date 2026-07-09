@@ -35,6 +35,13 @@ describe('agentinbox', () => {
     assert.equal(JSON.parse(readFileSync(path.join(outDir, 'queue.json'), 'utf8')).tasks.length, 5);
   });
 
+  it('compiled CLI prints help from the installed entrypoint', () => {
+    const output = execFileSync(process.execPath, [cliPath.pathname, '--help'], { encoding: 'utf8' });
+    assert.match(output, /Usage:/);
+    assert.match(output, /agentinbox scan <input> --out <dir>/);
+    assert.match(output, /agentinbox lint <input> \[--fail-under 75\]/);
+  });
+
   it('prints markdown briefs from the CLI', () => {
     const outDir = mkdtempSync(path.join(tmpdir(), 'agentinbox-brief-'));
     const output = execFileSync(process.execPath, [cliPath.pathname, 'brief', 'fixtures/inbox/github-issue.json', '--out', outDir], { encoding: 'utf8' });

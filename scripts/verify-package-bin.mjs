@@ -57,9 +57,16 @@ const output = execFileSync('npm', ['pack', '--dry-run', '--json'], {
 const [pack] = JSON.parse(output);
 const publishedFiles = new Set(pack.files.map((file) => file.path));
 const missingPackedFiles = expectedPackedFiles.filter((file) => !publishedFiles.has(file));
+const leakedTests = pack.files
+  .map((file) => file.path)
+  .filter((file) => file.startsWith('dist/test/'));
 
 if (missingPackedFiles.length > 0) {
   throw new Error(`package dry-run missing expected file(s): ${missingPackedFiles.join(', ')}`);
+}
+
+if (leakedTests.length > 0) {
+  throw new Error(`package dry-run includes compiled test file(s): ${leakedTests.join(', ')}`);
 }
 
 console.log(`Verified package dry-run contents (${pack.files.length} file(s)).`);

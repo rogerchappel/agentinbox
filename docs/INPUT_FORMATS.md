@@ -15,6 +15,8 @@ Recognized hints:
 
 ## JSON
 
+Directory scans recurse through supported input files beneath the selected directory. Directory symlinks are followed only when their resolved target remains inside that tree, and each resolved directory is visited at most once; links to ancestors, outside targets, and dangling links are ignored. A single supported file path may be supplied directly.
+
 JSON inputs may be a single object, an array of objects, or an object with `tasks`, `items`, or `issues`.
 
 Common fields:

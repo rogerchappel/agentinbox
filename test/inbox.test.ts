@@ -1,13 +1,30 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { execFileSync, execSync } from 'node:child_process';
-import { mkdtempSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { discoverInputs } from '../src/fs.js';
 
 const cliPath = new URL('../src/cli.js', import.meta.url);
 
 describe('agentinbox', () => {
+  it('does not follow ancestor loops or directory links outside the input tree', async () => {
+    const root = mkdtempSync(path.join(tmpdir(), 'agentinbox-links-'));
+    const nested = path.join(root, 'nested');
+    const external = mkdtempSync(path.join(tmpdir(), 'agentinbox-external-'));
+    mkdirSync(nested);
+    writeFileSync(path.join(nested, 'inside.txt'), 'inside');
+    writeFileSync(path.join(external, 'outside.txt'), 'outside');
+    symlinkSync(root, path.join(nested, 'ancestor'), 'dir');
+    symlinkSync(external, path.join(root, 'external'), 'dir');
+    try {
+      assert.deepEqual(await discoverInputs(root), [path.join(nested, 'inside.txt')]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+      rmSync(external, { recursive: true, force: true });
+    }
+  });
   it('package.json should have all required metadata', () => {
     const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
     assert.ok(pkg.name);

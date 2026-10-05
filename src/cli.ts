@@ -21,7 +21,10 @@ Commands:
 
 function readOption(argv: string[], name: string): string | undefined {
   const index = argv.indexOf(name);
-  return index === -1 ? undefined : argv[index + 1];
+  if (index === -1) return undefined;
+  const value = argv[index + 1];
+  if (value === undefined || value.startsWith("--")) return "";
+  return value;
 }
 
 export async function main(argv = process.argv.slice(2)): Promise<number> {
@@ -56,11 +59,11 @@ export async function main(argv = process.argv.slice(2)): Promise<number> {
   }
 
   const failUnderRaw = readOption(argv, "--fail-under") ?? "75";
-  const failUnder = Number.parseInt(failUnderRaw, 10);
-  if (!Number.isFinite(failUnder)) {
+  if (!/^\d+$/.test(failUnderRaw)) {
     process.stderr.write("agentinbox: --fail-under must be a number\n");
     return 2;
   }
+  const failUnder = Number(failUnderRaw);
   const result = await lintInbox({ input, failUnder, outDir });
   if (result.ok) {
     process.stdout.write(`agentinbox lint passed: ${result.summary.taskCount} task(s), average ${result.summary.averageScore}\n`);

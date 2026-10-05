@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { execFileSync, execSync } from 'node:child_process';
+import { execFileSync, execSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, mkdirSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -78,9 +78,17 @@ describe('agentinbox', () => {
     assert.deepEqual(plan.tasks.slice(0, 2).map((task: { risk: string }) => task.risk), ['low', 'low']);
   });
 
-  it('passes lint for actionable fixture tasks', () => {
+  it('passes lint for actionable fixture tasks at a valid threshold', () => {
     const outDir = mkdtempSync(path.join(tmpdir(), 'agentinbox-lint-'));
     const output = execFileSync(process.execPath, [cliPath.pathname, 'lint', 'fixtures/inbox', '--fail-under', '60', '--out', outDir], { encoding: 'utf8' });
     assert.match(output, /lint passed/);
+  });
+
+  it('rejects malformed or missing lint thresholds', () => {
+    for (const args of [['--fail-under', '60junk'], ['--fail-under']]) {
+      const result = spawnSync(process.execPath, [cliPath.pathname, 'lint', 'fixtures/inbox', ...args], { encoding: 'utf8' });
+      assert.equal(result.status, 2);
+      assert.match(result.stderr, /--fail-under must be a number/);
+    }
   });
 });
